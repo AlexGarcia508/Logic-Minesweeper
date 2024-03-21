@@ -208,4 +208,13 @@ class MinesweeperAI():
             1) have not already been chosen, and
             2) are not known to be mines
         """
+        possible_moves = [] #should iterate through the board and put all  the possible valid moves into the list
+
+        for i in range(self.height):
+            for j in range(self.width):
+                move = (i, j)
+                if move not in self.moves_made and move not in self.mines:
+                    possible_moves.append(move)
+
+
         raise NotImplementedError
