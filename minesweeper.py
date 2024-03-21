@@ -173,6 +173,31 @@ class MinesweeperAI():
         for sentence in self.knowledge:
             sentence.mark_safe(cell)
 
+    def nearby_cells(self, cell):
+        """
+        New function added.
+        Returns the number of cells that are
+        within one row and column of a given cell,
+        not including the cell itself.
+        """
+
+        # Keep set of nearby cells
+        surrounding_cells = set()
+
+        # Loop over all cells within one row and column
+        for i in range(cell[0] - 1, cell[0] + 2):
+            for j in range(cell[1] - 1, cell[1] + 2):
+
+                # Ignore the cell itself
+                if (i, j) == cell:
+                    continue
+
+                # Update set if cell in bounds
+                if 0 <= i < self.height and 0 <= j < self.width:
+                    surrounding_cells.add((i, j))
+
+        return surrounding_cells
+
     def add_knowledge(self, cell, count):
         """
         Called when the Minesweeper board tells us, for a given
@@ -188,6 +213,24 @@ class MinesweeperAI():
             5) add any new sentences to the AI's knowledge base
                if they can be inferred from existing knowledge
         """
+        self.moves_made.add(cell)
+        self.mark_safe(cell)
+
+        new_sentence = Sentence(self.nearby_cells(cell), count)
+        self.knowledge.append(new_sentence)
+
+        cells_set = new_sentence.cells
+
+        # cells and count are the same
+        if count == len(cells_set):
+            for cell in cells_set:
+                self.mark_mine(cell)
+
+        # more cells than count | cells = 3 count = 2
+        if len(cells_set) > count:
+
+
+
         raise NotImplementedError
 
     def make_safe_move(self):
