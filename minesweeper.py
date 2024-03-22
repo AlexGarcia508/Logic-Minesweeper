@@ -236,7 +236,7 @@ class MinesweeperAI():
 
         # mark_mine and mark_safe take care of updating rest knowledgebase
 
-        # Step 5: Check for Contradictions or Redundancies
+        # step 5
         redundant_indices = []
         for i, sentence in enumerate(self.knowledge):
             if sentence.cells.issubset(new_sentence.cells):
