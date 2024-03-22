@@ -213,25 +213,47 @@ class MinesweeperAI():
             5) add any new sentences to the AI's knowledge base
                if they can be inferred from existing knowledge
         """
+        # step 1
         self.moves_made.add(cell)
+
+        #step 2
         self.mark_safe(cell)
 
-        new_sentence = Sentence(self.nearby_cells(cell), count)
+        # step 3
+        surrounding_cells = self.nearby_cells(cell)
+
+        new_sentence = Sentence(surrounding_cells, count)
         self.knowledge.append(new_sentence)
 
-        cells_set = new_sentence.cells
-
+        # step 4
         # cells and count are the same
-        if count == len(cells_set):
-            for cell in cells_set:
+        if count == len(surrounding_cells):
+            for cell in surrounding_cells:
                 self.mark_mine(cell)
+        elif count == 0:
+            for cell in surrounding_cells:
+                self.mark_safe(cell)
 
-        # more cells than count | cells = 3 count = 2
-        if len(cells_set) > count:
+        # mark_mine and mark_safe take care of updating rest knowledgebase
 
+        # step 5
+        redundant_sentences = set()
+        for sentence in self.knowledge:
+            if sentence.cells.issubset(new_sentence.cells):
+                # The new sentence implies all cells in the existing sentence are mines
+                redundant_cells = sentence.cells - new_sentence.cells
+                for redundant_cell in redundant_cells:
+                    self.mark_safe(redundant_cell)
+                redundant_sentences.add(sentence)
+            elif new_sentence.cells.issubset(sentence.cells):
+                # The existing sentence implies all cells in the new sentence are mines
+                redundant_cells = new_sentence.cells - sentence.cells
+                for redundant_cell in redundant_cells:
+                    self.mark_safe(redundant_cell)
+                redundant_sentences.add(new_sentence)
 
-
-        raise NotImplementedError
+        # Remove redundant sentences from the knowledge base
+        self.knowledge = [sentence for sentence in self.knowledge if sentence not in redundant_sentences]
 
     def make_safe_move(self):
         """
