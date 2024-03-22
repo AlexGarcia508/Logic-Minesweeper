@@ -276,11 +276,10 @@ class MinesweeperAI():
             1) have not already been chosen, and
             2) are not known to be mines
         """
-        possible_moves = list(itertools.product(range(self.height), range(self.width)))
-        random.shuffle(possible_moves)
+        remaining_cells = list(itertools.product(range(self.height), range(self.width)))
+        remaining_cells = [cell for cell in remaining_cells if cell not in self.moves_made and cell not in self.mines]
 
-        for move in possible_moves:
-            if move not in self.moves_made and move not in self.mines:
-                return move
-
-        return None
+        if remaining_cells:
+            return random.choice(remaining_cells)
+        else:
+            return None
