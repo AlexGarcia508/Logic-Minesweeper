@@ -1,6 +1,29 @@
 import itertools
 import random
 
+"""
+Logic-Minesweeper
+"""
+"""
+CECS 451 Sec 02
+Student Names:
+Alex Garcia
+Chase Calero
+Shivkumar Manek
+Travis Nguyen
+Vincent Tran
+
+Summary:
+In this project understanding how the 3 classes utilized by the minesweeper AI worked together
+was crucial to making progress. Implementing functions for Sentence class was straightforward,
+but implementing functions for minesweeper AI class was a more challenging task specifically add_knowledge.
+
+Step 4 and 5 for the add_knowledge function required a bit more critical thinking compared to any other part.
+Step 4 asked us to reference the knowledge database and make applicable changes to cells to either a safe or mine.
+However, we took care of that within the functions mark_mine and mark_safe under the class Sentence. We further
+looked towards the knowledge base for step 5 in order to add new sentences via inferences from existing knowledge.
+We examined every sentence to check for contradictions and redundancies then made the appropriate changes.
+"""
 
 class Minesweeper():
     """
