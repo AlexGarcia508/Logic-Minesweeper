@@ -236,24 +236,24 @@ class MinesweeperAI():
 
         # mark_mine and mark_safe take care of updating rest knowledgebase
 
-        # step 5
-        redundant_sentences = set()
-        for sentence in self.knowledge:
+        # Step 5: Check for Contradictions or Redundancies
+        redundant_indices = []
+        for i, sentence in enumerate(self.knowledge):
             if sentence.cells.issubset(new_sentence.cells):
                 # The new sentence implies all cells in the existing sentence are mines
                 redundant_cells = sentence.cells - new_sentence.cells
                 for redundant_cell in redundant_cells:
                     self.mark_safe(redundant_cell)
-                redundant_sentences.add(sentence)
+                redundant_indices.append(i)
             elif new_sentence.cells.issubset(sentence.cells):
                 # The existing sentence implies all cells in the new sentence are mines
                 redundant_cells = new_sentence.cells - sentence.cells
                 for redundant_cell in redundant_cells:
                     self.mark_safe(redundant_cell)
-                redundant_sentences.add(new_sentence)
+                redundant_indices.append(i)
 
         # Remove redundant sentences from the knowledge base
-        self.knowledge = [sentence for sentence in self.knowledge if sentence not in redundant_sentences]
+        self.knowledge = [self.knowledge[i] for i in range(len(self.knowledge)) if i not in redundant_indices]
 
     def make_safe_move(self):
         """
