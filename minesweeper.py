@@ -263,19 +263,19 @@ class MinesweeperAI():
         redundant_indices = []
         for i, sentence in enumerate(self.knowledge):
             if sentence.cells.issubset(new_sentence.cells):
-                # The new sentence implies all cells in the existing sentence are mines
+                # mine implication of all cells in previous sentence based on new knowledge
                 redundant_cells = sentence.cells - new_sentence.cells
                 for redundant_cell in redundant_cells:
                     self.mark_safe(redundant_cell)
                 redundant_indices.append(i)
             elif new_sentence.cells.issubset(sentence.cells):
-                # The existing sentence implies all cells in the new sentence are mines
+                # mine implication of all cells in new sentence based on previous knowledge
                 redundant_cells = new_sentence.cells - sentence.cells
                 for redundant_cell in redundant_cells:
                     self.mark_safe(redundant_cell)
                 redundant_indices.append(i)
 
-        # Remove redundant sentences from the knowledge base
+        # remove redundancy
         self.knowledge = [self.knowledge[i] for i in range(len(self.knowledge)) if i not in redundant_indices]
 
     def make_safe_move(self):
